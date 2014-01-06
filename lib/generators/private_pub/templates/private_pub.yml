@@ -1,10 +1,19 @@
 development:
-  server: "http://localhost:9292/faye"
+  server: "http://localhost"
   secret_token: "secret"
+  base_port: 9292
+  num_sharts: 10
+  path: "/faye"
 test:
-  server: "http://localhost:9292/faye"
+  server: "http://localhost"
   secret_token: "secret"
+  base_port: 9292
+  num_sharts: 10
+  path: "/faye"
 production:
-  server: "http://example.com/faye"
+  server: "http://example.com"
   secret_token: "<%= defined?(SecureRandom) ? SecureRandom.hex(32) : ActiveSupport::SecureRandom.hex(32) %>"
   signature_expiration: 3600 # one hour
+  base_port: 9292
+  num_sharts: 10
+  path: "/faye"

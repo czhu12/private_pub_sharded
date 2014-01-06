@@ -1,4 +1,5 @@
 require "digest/sha1"
+require "digest/md5"
 require "net/http"
 require "net/https"
 
@@ -32,7 +33,10 @@ module PrivatePub
     # Sends the given message hash to the Faye server using Net::HTTP.
     def publish_message(message)
       raise Error, "No server specified, ensure private_pub.yml was loaded properly." unless config[:server]
-      url = URI.parse(config[:server])
+      #TODO: change so that the room name is hashed to determine server
+      url_string = get_url_string(message[:channel])
+
+      url = URI.parse(url_string)
 
       form = Net::HTTP::Post.new(url.path.empty? ? '/' : url.path)
       form.set_form_data(:message => message.to_json)
@@ -40,6 +44,12 @@ module PrivatePub
       http = Net::HTTP.new(url.host, url.port)
       http.use_ssl = url.scheme == "https"
       http.start {|h| h.request(form)}
+    end
+
+    def get_url_string(channel)
+        #return config[:server] unless config[:num_shards]
+        port_number = channel.hash.abs % config[:num_shards] + config[:base_port].to_i
+        "#{config[:server]}:#{port_number}#{config[:path]}"
     end
 
     # Returns a message hash for sending to Faye
@@ -56,7 +66,9 @@ module PrivatePub
     # Returns a subscription hash to pass to the PrivatePub.sign call in JavaScript.
     # Any options passed are merged to the hash.
     def subscription(options = {})
-      sub = {:server => config[:server], :timestamp => (Time.now.to_f * 1000).round}.merge(options)
+
+      sub = {:server => get_url_string(sub[:channel]), :timestamp => (Time.now.to_f * 1000).round}.merge(options)
+      #sub = {:server => config[:server], :timestamp => (Time.now.to_f * 1000).round}.merge(options)
       sub[:signature] = Digest::SHA1.hexdigest([config[:secret_token], sub[:channel], sub[:timestamp]].join)
       sub
     end
