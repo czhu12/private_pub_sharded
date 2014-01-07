@@ -11,7 +11,7 @@ module PrivatePub
           copy_file "../../../../app/assets/javascripts/private_pub.js", "public/javascripts/private_pub.js"
         end
         copy_file "private_pub.ru", "private_pub.ru"
-        copy_file "start_faye.sh", "script/start_faye.sh"
+        copy_file "start_faye.sh", "start_faye.sh"
       end
     end
   end
