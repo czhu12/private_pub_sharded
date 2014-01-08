@@ -46,12 +46,6 @@ module PrivatePub
       http.start {|h| h.request(form)}
     end
 
-    def get_url_string(channel)
-        #return config[:server] unless config[:num_shards]
-        port_number = channel.hash.abs % config[:num_shards] + config[:base_port].to_i
-        "#{config[:server]}:#{port_number}#{config[:path]}"
-    end
-
     # Returns a message hash for sending to Faye
     def message(channel, data)
       message = {:channel => channel, :data => {:channel => channel}, :ext => {:private_pub_token => config[:secret_token]}}
@@ -72,6 +66,12 @@ module PrivatePub
       sub
     end
 
+    def get_url_string(channel)
+        #return config[:server] unless config[:num_shards]
+        port_number = channel.hash.abs % config[:num_shards] + config[:base_port].to_i
+        "#{config[:server]}:#{port_number}#{config[:path]}"
+    end
+    
     # Determine if the signature has expired given a timestamp.
     def signature_expired?(timestamp)
       timestamp < ((Time.now.to_f - config[:signature_expiration])*1000).round if config[:signature_expiration]
