@@ -69,7 +69,7 @@ module PrivatePub
 
     def get_url_string(channel)
         #return config[:server] unless config[:num_shards]
-        port_number = channel.hash.abs % config[:num_shards] + config[:base_port].to_i
+        port_number = channel.hash.abs % config[:num_shards].to_i + config[:base_port].to_i
         "#{config[:server]}:#{port_number}#{config[:path]}"
     end
     

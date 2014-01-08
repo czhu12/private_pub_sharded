@@ -2,13 +2,13 @@ development:
   server: "http://localhost"
   secret_token: "secret"
   base_port: 9292
-  num_sharts: 10
+  num_shards: 10
   path: "/faye"
 test:
   server: "http://localhost"
   secret_token: "secret"
   base_port: 9292
-  num_sharts: 10
+  num_shards: 10
   path: "/faye"
 production:
   server: "http://example.com"
