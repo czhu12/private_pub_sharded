@@ -11,7 +11,7 @@ module PrivatePub
 
   class << self
     attr_reader :config
-
+    
     # Resets the configuration to the default (empty hash)
     def reset_config
       @config = {}
@@ -19,6 +19,9 @@ module PrivatePub
 
     # Loads the  configuration from a given YAML file and environment (such as production)
     def load_config(filename, environment)
+      @log = File.new("private_pub.log", "a+")
+      $stdout.reopen(@log)
+      $stderr.reopen(@log)
       yaml = YAML.load_file(filename)[environment.to_s]
       raise ArgumentError, "The #{environment} environment does not exist in #{filename}" if yaml.nil?
       yaml.each { |k, v| config[k.to_sym] = v }
@@ -35,6 +38,7 @@ module PrivatePub
       raise Error, "No server specified, ensure private_pub.yml was loaded properly." unless config[:server]
       #TODO: change so that the room name is hashed to determine server
       url_string = get_url_string(message[:channel])
+      puts(url_string)
 
       url = URI.parse(url_string)
 
