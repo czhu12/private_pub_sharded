@@ -15,5 +15,5 @@ production:
   secret_token: "<%= defined?(SecureRandom) ? SecureRandom.hex(32) : ActiveSupport::SecureRandom.hex(32) %>"
   signature_expiration: 3600 # one hour
   base_port: 9292
-  num_sharts: 11
+  num_shards: 11
   path: "/faye"
