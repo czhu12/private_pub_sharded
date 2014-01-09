@@ -19,7 +19,6 @@ module PrivatePub
 
     # Loads the  configuration from a given YAML file and environment (such as production)
     def load_config(filename, environment)
-      @log = File.new("private_pub.log", "a+")
       yaml = YAML.load_file(filename)[environment.to_s]
       raise ArgumentError, "The #{environment} environment does not exist in #{filename}" if yaml.nil?
       yaml.each { |k, v| config[k.to_sym] = v }
@@ -38,8 +37,7 @@ module PrivatePub
       url_string = get_url_string(message[:channel])
 
       url = URI.parse(url_string)
-      @log.write("Server Generated: #{url_string}")
-
+      File.open('private_pub.log', 'a') {|file| file.write(url_string)}
       form = Net::HTTP::Post.new(url.path.empty? ? '/' : url.path)
       form.set_form_data(:message => message.to_json)
 
