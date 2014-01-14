@@ -22,7 +22,7 @@ module PrivatePub
     end
 
     def get_server(channel)
-      PrivatePub.get_url_string()
+      PrivatePub.get_url_string(channel)
     end
   end
 end
