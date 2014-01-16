@@ -15,13 +15,13 @@ module PrivatePub
     # options.
     def subscribe_to(channel)
       subscription = PrivatePub.subscription(:channel => channel)
-      subscription.to_json
+      subscription
       #content_tag "script", :type => "text/javascript" do
       #  raw("PrivatePub.sign(#{subscription.to_json});")
       #end
     end
 
-    def get_server(channel)
+    def get_url_string(channel)
       PrivatePub.get_url_string(channel)
     end
   end

@@ -59,7 +59,6 @@ module PrivatePub
     # Returns a subscription hash to pass to the PrivatePub.sign call in JavaScript.
     # Any options passed are merged to the hash.
     def subscription(options = {})
-      
       server = get_url_string(options[:channel])
       sub = {:server => server, :timestamp => (Time.now.to_f * 1000).round}.merge(options)
       #sub = {:server => options[:channel], :timestamp => (Time.now.to_f * 1000).round}.merge(options)
@@ -69,7 +68,7 @@ module PrivatePub
 
     def get_url_string(channel)
         #return config[:server] unless config[:num_shards]
-        port_number = channel.hash.abs % config[:num_shards].to_i + config[:base_port].to_i
+        port_number = channel.to_s.hash.abs % config[:num_shards].to_i + config[:base_port].to_i
         "#{config[:server]}:#{port_number}#{config[:path]}"
     end
     
