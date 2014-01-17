@@ -38,7 +38,7 @@ module PrivatePub
 
       url = URI.parse(url_string)
 
-      File.open('private_pub.log', 'w') { |file| file.write("#{url_string}")
+      File.open('private_pub.log', 'w') { |file| file.write("#{url_string}")}
 
       form = Net::HTTP::Post.new(url.path.empty? ? '/' : url.path)
       form.set_form_data(:message => message.to_json)
