@@ -37,8 +37,7 @@ module PrivatePub
       url_string = get_url_string(message[:channel])
 
       url = URI.parse(url_string)
-
-      File.open('private_pub.log', 'w') { |file| file.write("#{url_string}")}
+      File.open('private_pub.log', 'a+') { |file| file.write("Published To: #{url_string}, Message: #{message[:data][:data]}, Channel: #{message[:channel]}\n")}
 
       form = Net::HTTP::Post.new(url.path.empty? ? '/' : url.path)
       form.set_form_data(:message => message.to_json)
@@ -66,6 +65,7 @@ module PrivatePub
       sub = {:server => server, :timestamp => (Time.now.to_f * 1000).round}.merge(options)
       #sub = {:server => options[:channel], :timestamp => (Time.now.to_f * 1000).round}.merge(options)
       sub[:signature] = Digest::SHA1.hexdigest([config[:secret_token], sub[:channel], sub[:timestamp]].join)
+      File.open('private_pub.log', 'a+') { |file| file.write("Subscribed To: #{server}, Channel: #{options[:channel]}\n")}
       sub
     end
 
