@@ -70,11 +70,13 @@ module PrivatePub
       sub
     end
 
+    def hash_c(channel)
+      Digest::MD5.hexdigest(channel.to_s).hex
+    end
+
     def get_url_string(channel)
-
         File.open('private_pub.log', 'a+') { |file| file.write("Generating for #{channel} with hash : #{channel.to_s.hash.abs}\n")}
-
-        port_number = channel.to_s.hash.abs % config[:num_shards].to_i + config[:base_port].to_i
+        port_number = hash_c(channel) % config[:num_shards].to_i + config[:base_port].to_i
         "#{config[:server]}:#{port_number}#{config[:path]}"
     end
     
