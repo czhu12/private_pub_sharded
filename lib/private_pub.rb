@@ -62,14 +62,16 @@ module PrivatePub
     # Any options passed are merged to the hash.
     def subscription(options = {})
       server = get_url_string(options[:channel])
+      File.open('private_pub.log', 'a+') { |file| file.write("Subscribed To: #{server}, Channel: #{options[:channel]}\n")}
       sub = {:server => server, :timestamp => (Time.now.to_f * 1000).round}.merge(options)
       #sub = {:server => options[:channel], :timestamp => (Time.now.to_f * 1000).round}.merge(options)
       sub[:signature] = Digest::SHA1.hexdigest([config[:secret_token], sub[:channel], sub[:timestamp]].join)
-      File.open('private_pub.log', 'a+') { |file| file.write("Subscribed To: #{server}, Channel: #{options[:channel]}\n")}
       sub
     end
 
     def get_url_string(channel)
+        #hash = options[:channel].to_s.hash
+        #hash = options[:hash_factor].to_s.hash if options[:hash_factor]
         #return config[:server] unless config[:num_shards]
         port_number = channel.to_s.hash.abs % config[:num_shards].to_i + config[:base_port].to_i
         "#{config[:server]}:#{port_number}#{config[:path]}"
