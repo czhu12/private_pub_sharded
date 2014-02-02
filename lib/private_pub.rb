@@ -75,7 +75,7 @@ module PrivatePub
     end
 
     def get_url_string(channel)
-        File.open('private_pub.log', 'a+') { |file| file.write("Generating for #{channel} with hash : #{channel.to_s.hash.abs}\n")}
+        File.open('private_pub.log', 'a+') { |file| file.write("Generating for #{channel} with hash : #{hash_c(channel)}\n")}
         port_number = hash_c(channel) % config[:num_shards].to_i + config[:base_port].to_i
         "#{config[:server]}:#{port_number}#{config[:path]}"
     end
